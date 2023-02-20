@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smile Game </title>
+    <style>
+        img{position: absolute;}
+        div{
+            position: absolute;
+            width: 500px;
+            height: 500px;
+
+        }
+        #leftside{border: blue 5px solid;}
+        #rightside{
+        left: 525px;
+        border: blue 5px solid;
+        }
+    </style>
+</head>
+<body>
+    <h1> The Smiley Game </h1>
+    <button id="btn" onclick="generateFaces()">Start Game</button> |
+    <button id="hint" onclick="giveHint()">Hint?</button> 
+    <span id="Warning">It will cost you</span>
+    <p>Click On the Extra smiling face on the left.<br>
+        wins: <span id="win">0</span> loses: <span id="losses">0</span><br>
+        how many faces you want:
+        <input type="number" name="numface" id="numface" value="2" max="10" style="width: 40px;">
+    </p>
+    <main id="border">
+        <div id="leftside"></div>
+        <div id="rightside"></div>
+    </main>
+    <script>
+        let numberOfFaces; //= 5; dynamic
+        let numface; //static
+        let newStart = true; // check if new game
+        let theLeftside = document.getElementById('leftside');
+        let theRightside = document.getElementById('rightside');
+        let win = 0;
+        let losses = 0;
+        
+        function generateFaces(){
+            if(newStart == true){
+                numberOfFaces = document.getElementById('numface').value;
+                numface = document.getElementById('numface').value;
+            }
+            document.getElementById('btn').disabled = true;
+            for (let i = 1; i <= numberOfFaces; i++) {
+                let randomTop = Math.floor(Math.random() * 400);
+                let randomLeft = Math.floor(Math.random() * 400);
+                let face = document.createElement("img");
+                    face.src = "sml.png";
+                    face.style.top = randomTop + "px";
+                    face.style.left = randomLeft + "px";
+                    face.style.width = "100px";
+                theLeftside.appendChild(face);
+            }
+            let leftsideImg = theLeftside.cloneNode(true);
+            leftsideImg.removeChild(leftsideImg.lastChild);
+            theRightside.appendChild(leftsideImg);
+
+
+            theLeftside.lastChild.addEventListener('click', nextLevel);
+            document.getElementById('border').addEventListener('click', gameOver);
+        }
+
+        function nextLevel(event){
+            event.stopPropagation();
+            alert("u Win");
+            while(theLeftside.firstChild){
+            theLeftside.removeChild(theLeftside.firstChild);
+            }
+            theRightside.innerHTML = '';
+            numberOfFaces += 5;
+            win = win + 1;
+            document.getElementById('win').innerHTML = win
+            generateFaces();
+        }
+        function gameOver(){
+            alert("U Lose");
+            while(theLeftside.firstChild){
+                theLeftside.removeChild(theLeftside.firstChild);
+            }
+            theRightside.innerHTML = '';
+            numberOfFaces += 5;
+            numberOfFaces = numface;
+            newStart = true 
+            document.getElementById('btn').disabled = false;
+            losses = losses + 1;
+            document.getElementById('losses').innerHTML = losses
+            document.getElementById('win').innerHTML = win;
+            document.getElementById('numface').value = numface;
+        }
+        function giveHint() {
+            let hinting = theLeftside.lastChild;
+                hinting.style.width = '105px';
+                hinting.style.height = '105px';
+                numberOfFaces = numberOfFaces - 1;
+                document.getElementById('numface').value = numberOfFaces;
+        setTimeout(
+            function(){
+                hinting.style.width = '100px';
+                hinting.style.height = '100px';
+            },5000);
+        }
+    </script>
+</body>
+</html>

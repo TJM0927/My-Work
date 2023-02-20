@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>color game</title>
+    <style>
+        #confetti{display: none;}
+    </style>
+</head>
+<body>
+    <h1>Color Game</h1>
+   <button type="button" onclick=runGame() onmouseover="hide()">Start Game</button>
+   <input type="text" id="plr" style="width: 140px;" placeholder="Name">
+    <div id="confetti">
+        <h1>You Won !</h1>
+        <h3>Hit start to play again</h3>
+        <img src="http://drpage.net/nucamp/confetti-32.gif" alt="confetti">
+    </div>
+
+
+    <script> 
+        const COLORS_ARRAY = [ 'blue', 'cyan', 'gold', 'gray', 'green', 'magenta', 'orange', 'red', 'white', 'yellow' ]; 
+        COLORS_ARRAY[2]= 'silver';
+        COLORS_ARRAY.sort();
+
+
+        function runGame(){
+            let numTries = 0
+            let player = document.getElementById("plr").value;
+            let guess = ""
+            let correct = false;
+            let targetIndex = Math.floor(Math.random() * COLORS_ARRAY.length);
+            let target = COLORS_ARRAY[targetIndex]
+            console.log(target);
+            do{
+                guess = prompt(
+                    'I Am thinkin one of these Colors:\n\r' +
+                    COLORS_ARRAY.join(' | ') +
+                    'what color am i thinking of?' +  player
+                );
+                numTries += 1;
+                if(guess === null){
+                    alert('you quit...' + guess)
+                    return;
+                }
+                correct = checkGuess(guess, target)
+            }
+            while (!correct);
+            alert("YOU WIN!!!!!IN" + numTries)
+            document.body.style.background = guess;
+        }
+
+        function checkGuess(guess, target, correct) {
+            const sorrymsg = "Sorry incorrect \n\n";
+            const trymsg = "\n\nPlease try again."
+            if(!COLORS_ARRAY.includes(guess)){
+                alert("I Don't Know" + trymsg);
+            } else if(guess < target){
+                    alert(
+                        sorrymsg +
+                        'hint: Your color is alphabetically higher than mine.' +
+                        trymsg
+                    )
+            } else if(guess > target){
+                alert(
+                    sorrymsg +
+                        'hint: Your color is alphabetically lower than mine.' +
+                        trymsg
+                )
+            } else {
+                correct = true
+                document.getElementById('confetti').style.display = "block"
+                document.getElementById('plr').focus()
+            }
+            return correct;
+                }
+                function hide(){
+                    document.getElementById('confetti').style.display = "none"
+                }
+   </script> 
+</body>
+</html>
